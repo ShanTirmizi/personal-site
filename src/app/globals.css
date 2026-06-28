@@ -1,26 +1,349 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
+/* ============================================================
+   THEME — "The Pitch": warm paper · ink · vermillion
+   Tokens transcribed 1:1 from the design handoff.
+   ============================================================ */
 @theme inline {
+  /* shadcn semantic tokens (kept so primitives stay on-brand) */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+
+  /* brand palette — utilities: bg-paper, text-ink, text-brand, border-line … */
+  --color-paper: #f2eee5;
+  --color-paper-card: #fbf8f1;
+  --color-ink: #1a1714;
+  --color-ink-soft: #3a352e;
+  --color-ink-soft-2: #4a453d;
+  --color-muted-2: #6b6456;
+  --color-muted-3: #837c6e;
+  --color-faint: #a9a294;
+  --color-faint-2: #c9c1b2;
+  --color-brand: #d93c1b;
+  --color-brand-hover: #c2330f;
+  --color-brand-bright: #e8693f;
+  --color-paper-on-dark: #f6f2e9;
+  --color-ink-on-dark: #ede7da;
+  --color-muted-on-dark: #b7b1a4;
+  --color-faint-on-dark: #8e8779;
+  --color-live: #5bd08a;
+  --color-line: rgba(26, 23, 20, 0.12);
+  --color-line-soft: rgba(26, 23, 20, 0.08);
+  --color-line-strong: rgba(26, 23, 20, 0.16);
+
+  /* fonts (wired to next/font variables in layout.tsx) */
+  --font-display: var(--font-bricolage), "Hanken Grotesk", sans-serif;
+  --font-sans: var(--font-hanken), system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+
+  /* motion */
+  --ease-out-soft: cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  --radius: 0.625rem;
+
+  /* shadcn semantic tokens remapped to the brand palette */
+  --background: #f2eee5;
+  --foreground: #1a1714;
+  --card: #fbf8f1;
+  --card-foreground: #1a1714;
+  --popover: #fbf8f1;
+  --popover-foreground: #1a1714;
+  --primary: #1a1714;
+  --primary-foreground: #f6f2e9;
+  --secondary: rgba(26, 23, 20, 0.05);
+  --secondary-foreground: #1a1714;
+  --muted: #fbf8f1;
+  --muted-foreground: #6b6456;
+  --accent: rgba(26, 23, 20, 0.05);
+  --accent-foreground: #1a1714;
+  --destructive: #d93c1b;
+  --border: rgba(26, 23, 20, 0.12);
+  --input: rgba(26, 23, 20, 0.16);
+  --ring: rgba(217, 60, 27, 0.55);
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+  html {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
+  }
+  body {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    overflow-x: hidden;
+  }
+  ::selection {
+    background: #d93c1b;
+    color: #f6f2e9;
+  }
+  /* keep the focus ring crisp + on-brand, never a fuzzy blue default */
+  :focus-visible {
+    outline: none;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ============================================================
+   Keyframes
+   ============================================================ */
+@keyframes riseIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  49% {
+    opacity: 1;
+  }
+  50%,
+  99% {
+    opacity: 0;
+  }
+}
+@keyframes pulseDot {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.25);
+  }
+}
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-rise {
+  animation: riseIn 0.7s var(--ease-out-soft) both;
+}
+.pulse-dot {
+  animation: pulseDot 2.4s ease-in-out infinite;
+}
+
+/* blinking caret for the streaming assistant answer */
+.caret {
+  display: inline-block;
+  width: 7px;
+  height: 1.05em;
+  margin-left: 2px;
+  vertical-align: -2px;
+  background: var(--color-brand-bright);
+  border-radius: 1px;
+  animation: blink 1s steps(1) infinite;
+}
+
+/* ============================================================
+   Scrollbars — tight, on-brand
+   ============================================================ */
+.om-sc::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+.om-sc::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 4px;
+}
+.om-sc::-webkit-scrollbar-track {
+  background: transparent;
+}
+.om-sc {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+}
+.om-sc-l::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+.om-sc-l::-webkit-scrollbar-thumb {
+  background: rgba(26, 23, 20, 0.18);
+  border-radius: 4px;
+}
+.no-sb::-webkit-scrollbar {
+  display: none;
+}
+.no-sb {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ============================================================
+   Assistant answer prose — readable, scannable, never "AI-slop"
+   Rendered from streamed markdown on the dark assistant card.
+   ============================================================ */
+.prose-chat {
+  font-size: 14.5px;
+  line-height: 1.62;
+  color: var(--color-ink-on-dark);
+  word-break: break-word;
+}
+.prose-chat > :first-child {
+  margin-top: 0;
+}
+.prose-chat > :last-child {
+  margin-bottom: 0;
+}
+.prose-chat p {
+  margin: 0 0 10px;
+}
+.prose-chat strong {
+  color: #fff;
+  font-weight: 600;
+}
+.prose-chat em {
+  font-style: italic;
+  color: var(--color-paper-on-dark);
+}
+.prose-chat a {
+  color: var(--color-brand-bright);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+  transition: color 0.15s;
+}
+.prose-chat a:hover {
+  color: #fff;
+}
+.prose-chat ul,
+.prose-chat ol {
+  margin: 8px 0 12px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  list-style: none;
+}
+.prose-chat li {
+  position: relative;
+  padding-left: 18px;
+  color: var(--color-ink-on-dark);
+}
+.prose-chat ul li::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 0.62em;
+  width: 5px;
+  height: 5px;
+  border-radius: 2px;
+  background: var(--color-brand);
+  transform: rotate(45deg);
+}
+.prose-chat ol {
+  counter-reset: item;
+}
+.prose-chat ol li {
+  padding-left: 22px;
+}
+.prose-chat ol li::before {
+  counter-increment: item;
+  content: counter(item);
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--color-brand-bright);
+  line-height: 1.7;
+}
+.prose-chat code {
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+  background: rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 1px 5px;
+  border-radius: 5px;
+  color: var(--color-paper-on-dark);
+}
+.prose-chat h1,
+.prose-chat h2,
+.prose-chat h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--color-paper-on-dark);
+  letter-spacing: -0.01em;
+  margin: 14px 0 6px;
+  font-size: 15.5px;
+}
+.prose-chat hr {
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin: 12px 0;
+}
+
+/* inline blinking caret at the very end of the streaming answer */
+.prose-chat[data-streaming="true"] > :last-child::after {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 1.02em;
+  margin-left: 3px;
+  vertical-align: -2px;
+  border-radius: 1px;
+  background: var(--color-brand-bright);
+  animation: blink 1s steps(1) infinite;
+}
+
+/* Respect reduced-motion: kill non-essential animation, keep content visible */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }
