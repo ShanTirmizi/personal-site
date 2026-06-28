@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import type { App, StoreLink } from "@/lib/site-data";
 
-// Custom-styled store buttons (deliberately NOT Apple/Google badge artwork — avoids
+// Custom-styled store buttons (deliberately NOT Apple/Google badge artwork, which avoids
 // trademark issues). Renders a real link when live; a clear "coming soon" otherwise.
 function StoreButton({
   kind,

@@ -1,6 +1,6 @@
 // Lightweight in-memory per-IP fixed-window limiter. Enough to deter abuse of
 // the public chat endpoint on a portfolio site (per-instance on serverless,
-// which is fine here — it's a guard, not a billing system).
+// which is fine here, it's a guard, not a billing system).
 
 type Entry = { count: number; reset: number };
 

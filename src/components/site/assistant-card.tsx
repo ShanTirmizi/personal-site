@@ -6,6 +6,7 @@ import remarkGfm from "remark-gfm";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useAssistant } from "@/hooks/use-assistant";
+import { ArtifactView } from "./artifact-view";
 import { SUGGESTIONS } from "@/lib/knowledge-base";
 
 const md: Components = {
@@ -37,7 +38,7 @@ export function AssistantCard() {
   const { messages, input, setInput, submit, ask, status, busy } = useAssistant();
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
-  // Auto-scroll to bottom as content streams — but don't fight a user who scrolled up.
+  // Auto-scroll to bottom as content streams, but don't fight a user who scrolled up.
   useEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
@@ -87,14 +88,21 @@ export function AssistantCard() {
                 {isThinking ? (
                   <Thinking />
                 ) : (
-                  <div
-                    className="prose-chat"
-                    data-streaming={isActive && status === "streaming" ? "true" : undefined}
-                  >
-                    <ReactMarkdown remarkPlugins={[remarkGfm]} components={md}>
-                      {m.content}
-                    </ReactMarkdown>
-                  </div>
+                  <>
+                    {m.content && (
+                      <div
+                        className="prose-chat"
+                        data-streaming={isActive && status === "streaming" ? "true" : undefined}
+                      >
+                        <ReactMarkdown remarkPlugins={[remarkGfm]} components={md}>
+                          {m.content}
+                        </ReactMarkdown>
+                      </div>
+                    )}
+                    {m.artifacts?.map((a) => (
+                      <ArtifactView key={a.id} artifact={a} />
+                    ))}
+                  </>
                 )}
               </div>
             </div>

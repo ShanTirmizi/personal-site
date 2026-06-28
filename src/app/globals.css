@@ -5,7 +5,7 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ============================================================
-   THEME — "The Pitch": warm paper · ink · vermillion
+   THEME · "The Pitch": warm paper · ink · vermillion
    Tokens transcribed 1:1 from the design handoff.
    ============================================================ */
 @theme inline {
@@ -33,7 +33,7 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) * 1.4);
 
-  /* brand palette — utilities: bg-paper, text-ink, text-brand, border-line … */
+  /* brand palette · utilities: bg-paper, text-ink, text-brand, border-line … */
   --color-paper: #f2eee5;
   --color-paper-card: #fbf8f1;
   --color-ink: #1a1714;
@@ -185,7 +185,7 @@
 }
 
 /* ============================================================
-   Scrollbars — tight, on-brand
+   Scrollbars · tight, on-brand
    ============================================================ */
 .om-sc::-webkit-scrollbar {
   width: 7px;
@@ -219,7 +219,7 @@
 }
 
 /* ============================================================
-   Assistant answer prose — readable, scannable, never "AI-slop"
+   Assistant answer prose · readable, scannable, never "AI-slop"
    Rendered from streamed markdown on the dark assistant card.
    ============================================================ */
 .prose-chat {

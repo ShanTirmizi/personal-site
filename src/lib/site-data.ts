@@ -1,6 +1,7 @@
 // ============================================================
-// Single source of truth for every piece of copy on the page.
-// Verbatim from the design handoff + CV. Edit here, not in JSX.
+// Single source of truth for page copy. Written to read like a human
+// wrote it: no em dashes, plain confident sentences. CV facts/metrics
+// live in cv-data.ts.
 // ============================================================
 
 export const identity = {
@@ -14,7 +15,7 @@ export const identity = {
 export const contact = {
   email: "tirmizishahnawaz@gmail.com",
   mailto: `mailto:tirmizishahnawaz@gmail.com?subject=${encodeURIComponent(
-    "Let’s talk — opportunity for Shan",
+    "Let’s talk about a role",
   )}`,
   github: "https://github.com/ShanTirmizi",
   linkedin: "https://www.linkedin.com/in/shan-tirmizi-7b3114159/",
@@ -23,26 +24,11 @@ export const contact = {
 
 export const hero = {
   kicker: "Open to senior AI & full-stack roles",
-  headlineTop: "Don’t read my CV —",
-  headlineAccent: "talk to it.",
-  sub: "I’m an AI engineer who ships — streaming Claude apps, agentic workflows and low-latency backends, in production. Don’t take my word for it: ask the assistant, or skim the proof below.",
+  headlineTop: "Don’t read my CV.",
+  headlineAccent: "Talk to it.",
+  sub: "I’m an AI engineer who ships: streaming Claude apps, agentic workflows and low-latency backends, all in production. Don’t take my word for it. Ask the assistant, or skim the proof below.",
   proofLine: "5+ yrs shipping · 3 LLM products · p95 −30% · onboarding −81%",
 } as const;
-
-export type Metric = {
-  value: number;
-  prefix: "−" | "+";
-  suffix: string;
-  label: string;
-  context: string;
-};
-
-export const metrics: Metric[] = [
-  { value: 30, prefix: "−", suffix: "%", label: "p95 latency", context: "Flask → FastAPI migration" },
-  { value: 81, prefix: "−", suffix: "%", label: "Onboarding time", context: "1.5 weeks → 2 days" },
-  { value: 40, prefix: "−", suffix: "%", label: "Runtime errors", context: "JS → TypeScript migration" },
-  { value: 50, prefix: "+", suffix: "%", label: "App performance", context: "Rails → Next.js rewrite" },
-];
 
 export const shippedAt = [
   "PolyAI",
@@ -59,7 +45,6 @@ export type App = {
   period: string;
   tag: string;
   blurb: string;
-  /** static screenshot path, OR a rendered screen key */
   image?: string;
   imageAlt?: string;
   screen?: "habitquest";
@@ -75,16 +60,16 @@ export const apps: App[] = [
     id: "visa-atlas",
     name: "Visa Atlas",
     kind: "Cross-platform travel app · iOS & Android",
-    period: "Mar 2026 — Present",
+    period: "Mar 2026 – Present",
     tag: "Personal product",
     blurb:
-      "An AI travel companion: plan trips, route your day, and get passport-aware visa answers — grounded and streaming.",
+      "An AI travel companion: plan trips, route your day, and get passport-aware visa answers, grounded and streaming.",
     image: "/apps/visa-atlas.png",
-    imageAlt: "Visa Atlas — the AI trip planner screen",
+    imageAlt: "Visa Atlas, the AI trip planner screen",
     highlights: [
       "AI itinerary generator producing complete, structured trip plans (flights, lodging, dining, activities) with streaming Claude responses.",
       "Agentic, web-grounded day-planner that turns a start point, transport mode and vibe into a geocoded, routed itinerary.",
-      "Claude-powered visa assistant — grounded, passport-aware answers backed by a structured visa-rules dataset.",
+      "Claude-powered visa assistant: grounded, passport-aware answers backed by a structured visa-rules dataset.",
     ],
     stack: ["Expo", "React Native", "TypeScript", "Convex"],
     store: { appStore: comingSoon, googlePlay: comingSoon },
@@ -93,7 +78,7 @@ export const apps: App[] = [
     id: "habitquest",
     name: "HabitQuest",
     kind: "Gamified habit-tracking app",
-    period: "Feb 2026 — Apr 2026",
+    period: "Feb 2026 – Apr 2026",
     tag: "Personal product",
     blurb:
       "A habit tracker with an RPG soul and a Claude coach that actually remembers you.",
@@ -130,7 +115,7 @@ export const whyHire = {
       idx: "01",
       inverted: true,
       title: "I ship AI, not demos",
-      body: "Production LLM features at PolyAI, plus two AI apps of my own — streaming Claude, RAG, agentic workflows and a self-hosted Anthropic proxy. Real users, real uptime.",
+      body: "Production LLM features at PolyAI, plus two AI apps of my own: streaming Claude, RAG, agentic workflows and a self-hosted Anthropic proxy. Real users, real uptime.",
     },
     {
       idx: "02",
@@ -140,24 +125,29 @@ export const whyHire = {
     {
       idx: "03",
       title: "I de-risk your delivery",
-      body: "Client-facing for years: led a £9.4M project, delivered two weeks early, and fixed 95% of critical bugs in three months. I communicate clearly with non-technical stakeholders.",
+      body: "Client-facing for years: I led a £9.4M project, delivered two weeks early, and fixed 95% of critical bugs in three months. I communicate clearly with non-technical stakeholders.",
     },
     {
       idx: "04",
       title: "I make the whole team faster",
-      body: "Built the first docs system, made code reviews mandatory, and mentor as I go — onboarding cut from 1.5 weeks to 2 days. Le Wagon ’21 hackathon winner (beat 92).",
+      body: "I built the first docs system, made code reviews mandatory, and mentor as I go. Onboarding fell from 1.5 weeks to 2 days. Le Wagon ’21 hackathon winner (beat 92).",
     },
   ] as HireCard[],
+} as const;
+
+export const personal = {
+  kicker: "Off the clock",
+  line: "I’m a geography nerd and serial traveller (it’s genuinely why Visa Atlas exists), and a lifelong Lego builder. Same instinct, really: take a messy pile of parts and turn it into something that clicks together.",
 } as const;
 
 export const closing = {
   kicker: "// the easy yes",
   headlineTop: "Hiring an AI engineer?",
   headlineBottom: "This one’s a no-brainer.",
-  sub: "Open to senior full-stack & AI engineering roles, in London or remote. Tell me what you’re building — I reply fast.",
+  sub: "Open to senior full-stack & AI engineering roles, in London or remote. Tell me what you’re building and I’ll reply fast.",
 } as const;
 
 export const footer = {
-  left: "© 2026 Shan Tirmizi — London, UK",
-  center: "Built as a live, Claude-powered demo — the kind of thing I ship.",
+  left: "© 2026 Shan Tirmizi · London, UK",
+  center: "Built as a live, Claude-powered demo. The kind of thing I ship.",
 } as const;

@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "Shan Tirmizi — AI & Full-Stack Engineer. Don’t read my CV — talk to it.";
+export const alt = "Shan Tirmizi · AI & Full-Stack Engineer. Don’t read my CV. Talk to it.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -16,7 +16,7 @@ async function loadFont(family: string, weight: number, text: string) {
 }
 
 export default async function OpengraphImage() {
-  const display = "Don’t read my CV — talk to it.ST";
+  const display = "Don’t read my CV. Talk to it.ST";
   const body = "Shan Tirmizi AI ENGINEER · FULL-STACK · LONDON Live Claude assistant on the site";
 
   const [bricolage, hanken] = await Promise.all([
@@ -71,8 +71,8 @@ export default async function OpengraphImage() {
             letterSpacing: -4,
           }}
         >
-          <div style={{ display: "flex" }}>Don’t read my CV —</div>
-          <div style={{ display: "flex", color: ACCENT }}>talk to it.</div>
+          <div style={{ display: "flex" }}>Don’t read my CV.</div>
+          <div style={{ display: "flex", color: ACCENT }}>Talk to it.</div>
         </div>
 
         {/* footer row */}

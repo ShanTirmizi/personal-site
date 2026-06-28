@@ -3,7 +3,7 @@ import { Bricolage_Grotesque, Hanken_Grotesk, IBM_Plex_Mono } from "next/font/go
 import "./globals.css";
 import { GrainOverlay } from "@/components/site/grain-overlay";
 
-// Display — headlines & big numbers. Body — UI/paragraphs. Mono — kickers, tags, chrome.
+// Display:headlines & big numbers. Body:UI/paragraphs. Mono:kickers, tags, chrome.
 const bricolage = Bricolage_Grotesque({
   variable: "--font-bricolage",
   subsets: ["latin"],
@@ -26,11 +26,11 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://shan-tirmizi.verce
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Shan Tirmizi — AI & Full-Stack Engineer",
-    template: "%s — Shan Tirmizi",
+    default: "Shan Tirmizi · AI & Full-Stack Engineer",
+    template: "%s · Shan Tirmizi",
   },
   description:
-    "Shan Tirmizi is a London-based AI & full-stack engineer who ships production streaming-Claude apps, agentic workflows and low-latency backends. Don't read his CV — talk to it.",
+    "Shan Tirmizi is a London-based AI & full-stack engineer who ships production streaming-Claude apps, agentic workflows and low-latency backends. Don't read his CV. Talk to it.",
   keywords: [
     "Shan Tirmizi",
     "AI Engineer",
@@ -52,15 +52,15 @@ export const metadata: Metadata = {
     locale: "en_GB",
     url: SITE_URL,
     siteName: "Shan Tirmizi",
-    title: "Shan Tirmizi — AI & Full-Stack Engineer",
+    title: "Shan Tirmizi · AI & Full-Stack Engineer",
     description:
-      "Don't read my CV — talk to it. A London-based AI engineer who ships streaming Claude apps, agentic workflows and low-latency backends in production.",
+      "Don't read my CV. Talk to it. A London-based AI engineer who ships streaming Claude apps, agentic workflows and low-latency backends in production.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Shan Tirmizi — AI & Full-Stack Engineer",
+    title: "Shan Tirmizi · AI & Full-Stack Engineer",
     description:
-      "Don't read my CV — talk to it. A London-based AI engineer shipping production LLM products.",
+      "Don't read my CV. Talk to it. A London-based AI engineer shipping production LLM products.",
   },
   robots: { index: true, follow: true },
 };

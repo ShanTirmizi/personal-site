@@ -1,9 +1,9 @@
 "use client";
 
 import { useCountUp } from "@/hooks/use-count-up";
-import type { Metric } from "@/lib/site-data";
+import type { ImpactMetric } from "@/lib/cv-data";
 
-export function MetricCard({ metric }: { metric: Metric }) {
+export function MetricCard({ metric }: { metric: ImpactMetric }) {
   const { ref, value } = useCountUp(metric.value);
   const n = Math.round(value);
   const display = `${n === 0 ? "" : metric.prefix}${n}${metric.suffix}`;

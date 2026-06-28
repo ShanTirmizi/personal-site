@@ -1,6 +1,6 @@
 import { Sparkles, Flame, Dumbbell, BookOpen, Moon, Home, Trophy, User, Check, Leaf } from "lucide-react";
 
-// Faithful HabitQuest screen (no real screenshot exists — the RN app can't be
+// Faithful HabitQuest screen (no real screenshot exists, the RN app can't be
 // captured headlessly). Designed at 2× (264×560) and scaled to 0.5 so it renders
 // crisp inside the 132×280 phone slot, exactly like a downscaled screenshot.
 
@@ -64,7 +64,7 @@ export function HabitQuestScreen() {
     <div
       className="absolute left-0 top-0 origin-top-left"
       style={{ width: 264, height: 560, transform: "scale(0.5)", background: C.bg, color: C.text }}
-      aria-label="HabitQuest app — Dr. Sage AI coach and daily quests"
+      aria-label="HabitQuest app: Dr. Sage AI coach and daily quests"
     >
       <div className="flex h-full flex-col px-[18px] pt-3 pb-2">
         {/* status bar */}
@@ -137,7 +137,7 @@ export function HabitQuestScreen() {
             </span>
           </div>
           <p className="mt-2 text-[12px] leading-[1.5]" style={{ color: C.muted }}>
-            You crush mornings — let&apos;s protect that{" "}
+            You crush mornings, so let&apos;s protect that{" "}
             <span style={{ color: C.text, fontWeight: 600 }}>7am run</span>. Want a backup plan for
             days work runs late?
           </p>
