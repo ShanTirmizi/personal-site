@@ -4,7 +4,7 @@ A portfolio that leads with a **live, streaming Claude assistant** a recruiter c
 
 > **Don’t read my CV — talk to it.**
 
-**Live:** _deployed on Vercel_ · **Built by** [Shan Tirmizi](https://github.com/ShanTirmizi) — AI & full-stack engineer, London.
+**Live:** **[shan-tirmizi.vercel.app](https://shan-tirmizi.vercel.app)** · **Built by** [Shan Tirmizi](https://github.com/ShanTirmizi) — AI & full-stack engineer, London.
 
 ---
 
