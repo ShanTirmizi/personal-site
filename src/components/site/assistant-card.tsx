@@ -1,13 +1,30 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { ArrowRight, Check } from "lucide-react";
+import { ArrowRight, Check, Sparkles } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useAssistant, THINK_PHRASES } from "@/hooks/use-assistant";
+import { useAssistant, THINK_PHRASES, type ChatMessage } from "@/hooks/use-assistant";
+import { INTRO_QUESTION, INTRO_ANSWER, sourcesFor } from "@/lib/knowledge-base";
 import { ArtifactView } from "./artifact-view";
+import { RoleMatcher } from "./role-matcher";
+
+// The intro opener's exact Q&A, pre-loaded as the chat's first exchange so the
+// moment the overlay lifts the visitor sees the same conversation sitting here,
+// already answered — continuous, not replayed. Kept verbatim via the shared
+// INTRO_* constants so the overlay and the chat can never drift apart.
+const SEEDED_EXCHANGE: ChatMessage[] = [
+  { id: "intro-q", role: "user", content: INTRO_QUESTION, done: true },
+  {
+    id: "intro-a",
+    role: "assistant",
+    content: INTRO_ANSWER,
+    done: true,
+    sources: sourcesFor(INTRO_QUESTION),
+  },
+];
 
 const md: Components = {
   a: ({ href, children }) => (
@@ -71,9 +88,10 @@ function SourcePills({ sources }: { sources: string[] }) {
 }
 
 export function AssistantCard() {
-  const { messages, input, onInputChange, onInputFocus, submit, ask, status, busy, chips, thinkingStep } =
-    useAssistant();
+  const { messages, input, onInputChange, onInputFocus, submit, ask, tailorToRole, status, busy, chips, thinkingStep } =
+    useAssistant({ initialMessages: SEEDED_EXCHANGE });
   const scrollRef = useRef<HTMLDivElement | null>(null);
+  const [matching, setMatching] = useState(false);
 
   // Pin to the newest message whenever the conversation changes (new question,
   // trace step, or streamed text). It only fires on change, so reading back
@@ -161,20 +179,44 @@ export function AssistantCard() {
           })}
         </div>
 
-        {/* dynamic follow-up chips */}
-        <div className="om-sc flex gap-[7px] overflow-x-auto px-4 pb-2.5">
-          {chips.map((s) => (
+        {/* role matcher / follow-up chips */}
+        {matching ? (
+          <RoleMatcher
+            busy={busy}
+            onCancel={() => setMatching(false)}
+            onSubmit={(jd) => {
+              setMatching(false);
+              tailorToRole(jd);
+            }}
+            onArchetype={(brief, key) => {
+              setMatching(false);
+              tailorToRole(brief, key);
+            }}
+          />
+        ) : (
+          <div className="om-sc flex gap-[7px] overflow-x-auto px-4 pb-2.5">
             <button
-              key={s}
               type="button"
               disabled={busy}
-              onClick={() => ask(s)}
-              className="flex-none cursor-pointer whitespace-nowrap rounded-[8px] border border-white/[0.12] bg-white/[0.05] px-2.5 py-1.5 font-mono text-[11px] text-[#c8c2b5] transition-colors hover:bg-white/[0.12] disabled:cursor-default disabled:opacity-40"
+              onClick={() => setMatching(true)}
+              className="flex flex-none cursor-pointer items-center gap-1.5 whitespace-nowrap rounded-[8px] border border-brand/40 bg-brand/[0.12] px-2.5 py-1.5 font-mono text-[11px] font-medium text-brand-bright transition-colors hover:bg-brand/[0.2] disabled:cursor-default disabled:opacity-40"
             >
-              {s}
+              <Sparkles size={12} aria-hidden />
+              Tailor to your role
             </button>
-          ))}
-        </div>
+            {chips.map((s) => (
+              <button
+                key={s}
+                type="button"
+                disabled={busy}
+                onClick={() => ask(s)}
+                className="flex-none cursor-pointer whitespace-nowrap rounded-[8px] border border-white/[0.12] bg-white/[0.05] px-2.5 py-1.5 font-mono text-[11px] text-[#c8c2b5] transition-colors hover:bg-white/[0.12] disabled:cursor-default disabled:opacity-40"
+              >
+                {s}
+              </button>
+            ))}
+          </div>
+        )}
 
         {/* input */}
         <form

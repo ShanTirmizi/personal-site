@@ -1,7 +1,12 @@
 import { anthropic } from "@ai-sdk/anthropic";
 import { streamText, tool } from "ai";
 import { z } from "zod";
-import { SYSTEM_PROMPT, localAnswer } from "@/lib/knowledge-base";
+import {
+  SYSTEM_PROMPT,
+  localAnswer,
+  tailorSystemPrompt,
+  localRoleAnswer,
+} from "@/lib/knowledge-base";
 import { rateLimit } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
@@ -12,6 +17,7 @@ export const maxDuration = 30;
 const MODEL = "claude-sonnet-4-6";
 const MAX_MESSAGES = 24;
 const MAX_CHARS = 4000;
+const MAX_JD_CHARS = 6000;
 
 type ChatMessage = { role: "user" | "assistant"; content: string };
 
@@ -40,6 +46,11 @@ const tools = {
     inputSchema: z.object({}),
   }),
 };
+
+// Belt-and-braces house style: the system prompt forbids em dashes, but models
+// occasionally slip one in. Normalise any that reach the stream to a comma.
+// Only the em dash (U+2014) is touched, never the minus sign in metrics (−30%).
+const sanitize = (s: string) => s.replace(/\s*—\s*/g, ", ");
 
 function clientIp(req: Request): string {
   const fwd = req.headers.get("x-forwarded-for");
@@ -72,9 +83,16 @@ function onceText(text: string) {
 
 export async function POST(req: Request) {
   let messages: ChatMessage[] = [];
+  // Optional role-match context: a pasted JD (or an archetype's brief) plus an
+  // optional archetype key used only to pick the right local fallback.
+  let jobDescription = "";
+  let roleKey: string | undefined;
   try {
     const body = await req.json();
     messages = Array.isArray(body?.messages) ? body.messages : [];
+    if (typeof body?.jobDescription === "string")
+      jobDescription = body.jobDescription.slice(0, MAX_JD_CHARS).trim();
+    if (typeof body?.roleKey === "string") roleKey = body.roleKey;
   } catch {
     return new Response("Bad request", { status: 400 });
   }
@@ -101,7 +119,9 @@ export async function POST(req: Request) {
   }
 
   if (!process.env.ANTHROPIC_API_KEY) {
-    return onceText(localAnswer(lastUser.content));
+    return onceText(
+      jobDescription ? localRoleAnswer(roleKey) : localAnswer(lastUser.content),
+    );
   }
 
   const enc = new TextEncoder();
@@ -115,7 +135,7 @@ export async function POST(req: Request) {
       try {
         const result = streamText({
           model: anthropic(MODEL),
-          system: SYSTEM_PROMPT,
+          system: jobDescription ? tailorSystemPrompt(jobDescription) : SYSTEM_PROMPT,
           messages,
           tools,
           maxOutputTokens: 700,
@@ -126,7 +146,7 @@ export async function POST(req: Request) {
         for await (const delta of result.textStream) {
           if (delta) {
             emittedText = true;
-            send({ t: "d", v: delta });
+            send({ t: "d", v: sanitize(delta) });
           }
         }
 
@@ -141,7 +161,10 @@ export async function POST(req: Request) {
       }
 
       if (!emittedText && toolCount === 0) {
-        send({ t: "d", v: localAnswer(lastUser.content) });
+        send({
+          t: "d",
+          v: jobDescription ? localRoleAnswer(roleKey) : localAnswer(lastUser.content),
+        });
       }
       controller.close();
     },

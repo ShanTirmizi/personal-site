@@ -6,6 +6,7 @@ import {
   INITIAL_CHIPS,
   DEMO_QUESTION,
   localAnswer,
+  localRoleAnswer,
   followupsFor,
   sourcesFor,
 } from "@/lib/knowledge-base";
@@ -52,13 +53,29 @@ const uid = () =>
     ? crypto.randomUUID()
     : `id-${Math.random().toString(36).slice(2)}`;
 
-export function useAssistant() {
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    { id: "intro", role: "assistant", content: INTRO_MESSAGE, done: true },
-  ]);
+export type UseAssistantOptions = {
+  /**
+   * Seed the transcript so the chat opens already populated — used by the
+   * intro opener to carry its exact Q&A across as the first exchange.
+   */
+  initialMessages?: ChatMessage[];
+  /** Type-it-out self demo on mount. Forced off when the chat is seeded. */
+  autoDemo?: boolean;
+};
+
+export function useAssistant({ initialMessages, autoDemo = true }: UseAssistantOptions = {}) {
+  const seeded = !!initialMessages?.length;
+  const [messages, setMessages] = useState<ChatMessage[]>(
+    () =>
+      initialMessages ?? [{ id: "intro", role: "assistant", content: INTRO_MESSAGE, done: true }],
+  );
   const [input, setInput] = useState("");
   const [status, setStatus] = useState<Status>("idle");
-  const [chips, setChips] = useState<string[]>([...INITIAL_CHIPS]);
+  // When seeded, follow-ups reflect the seeded question so the chat is primed to continue.
+  const [chips, setChips] = useState<string[]>(() => {
+    const lastUser = initialMessages?.filter((m) => m.role === "user").at(-1);
+    return lastUser ? followupsFor(lastUser.content) : [...INITIAL_CHIPS];
+  });
   const [thinkingStep, setThinkingStep] = useState(0);
   const busy = status !== "idle";
 
@@ -140,10 +157,16 @@ export function useAssistant() {
   }, []);
 
   const send = useCallback(
-    async (question: string, opts?: { demo?: boolean }) => {
+    async (
+      question: string,
+      opts?: { demo?: boolean; jobDescription?: string; roleKey?: string },
+    ) => {
       const q = question.trim();
       if (!q || busyRef.current) return;
       const demo = opts?.demo ?? false;
+      // Role-match turn: a pasted JD / archetype brief rides alongside the
+      // question; fallbacks use the role-specific local answer.
+      const jd = opts?.jobDescription?.trim();
 
       const firstUser = messages.findIndex((m) => m.role === "user");
       const prior =
@@ -200,7 +223,10 @@ export function useAssistant() {
         const res = await fetch("/api/chat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ messages: [...prior, { role: "user", content: q }] }),
+          body: JSON.stringify({
+            messages: [...prior, { role: "user", content: q }],
+            ...(jd ? { jobDescription: jd, roleKey: opts?.roleKey } : {}),
+          }),
         });
         if (!res.ok || !res.body) throw new Error("bad response");
 
@@ -245,14 +271,16 @@ export function useAssistant() {
         if (!fullRef.current) {
           fullRef.current = pendingArtifacts.current.length
             ? ARTIFACT_LEAD[pendingArtifacts.current[0].kind]
-            : localAnswer(q);
+            : jd
+              ? localRoleAnswer(opts?.roleKey)
+              : localAnswer(q);
         }
         streamDoneRef.current = true;
         gotFirstToken.current = true;
         maybeReveal();
       } catch {
         if (!fullRef.current && pendingArtifacts.current.length === 0) {
-          fullRef.current = localAnswer(q);
+          fullRef.current = jd ? localRoleAnswer(opts?.roleKey) : localAnswer(q);
         }
         streamDoneRef.current = true;
         gotFirstToken.current = true;
@@ -272,19 +300,24 @@ export function useAssistant() {
   // Deps are [] on purpose: if this re-ran when `send` changed (i.e. on every
   // message update) its cleanup would kill the in-flight trace/reveal timers.
   useEffect(() => {
-    const typeInto = (q: string, i: number) => {
-      if (userTook.current) return;
-      if (i > q.length) {
-        setInput("");
-        void sendRef.current(q, { demo: true });
-        return;
-      }
-      setInput(q.slice(0, i));
-      demoTimer.current = setTimeout(() => typeInto(q, i + 1), DEMO_CHAR_MS);
-    };
-    demoTimer.current = setTimeout(() => {
-      if (!userTook.current) typeInto(DEMO_QUESTION, 0);
-    }, DEMO_DELAY_MS);
+    // Seeded chats already show the intro's Q&A — never replay the self-demo
+    // on top of it (that would double up the question). Cleanup still runs so
+    // any in-flight real send is torn down on unmount.
+    if (!seeded && autoDemo) {
+      const typeInto = (q: string, i: number) => {
+        if (userTook.current) return;
+        if (i > q.length) {
+          setInput("");
+          void sendRef.current(q, { demo: true });
+          return;
+        }
+        setInput(q.slice(0, i));
+        demoTimer.current = setTimeout(() => typeInto(q, i + 1), DEMO_CHAR_MS);
+      };
+      demoTimer.current = setTimeout(() => {
+        if (!userTook.current) typeInto(DEMO_QUESTION, 0);
+      }, DEMO_DELAY_MS);
+    }
     return () => {
       if (demoTimer.current) clearTimeout(demoTimer.current);
       if (thinkTimer.current) clearInterval(thinkTimer.current);
@@ -312,6 +345,15 @@ export function useAssistant() {
     },
     [markUser, send],
   );
+  // Tailor the pitch to a specific role. The JD/brief rides as context; the
+  // visible bubble stays a short, friendly ask so the transcript stays clean.
+  const tailorToRole = useCallback(
+    (jobDescription: string, roleKey?: string) => {
+      markUser();
+      void send("How does Shan fit this role?", { jobDescription, roleKey });
+    },
+    [markUser, send],
+  );
 
   return {
     messages,
@@ -320,6 +362,7 @@ export function useAssistant() {
     onInputFocus: markUser,
     submit,
     ask,
+    tailorToRole,
     status,
     busy,
     chips,

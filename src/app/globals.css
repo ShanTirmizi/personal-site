@@ -380,6 +380,67 @@
   animation: blink 1s steps(1) infinite;
 }
 
+/* ============================================================
+   Intro opener "C1 — Agentic" · once-per-visit first impression
+   Visibility is gated by `.intro-armed` on <html>, set by a pre-paint
+   script in layout.tsx — so the overlay only shows on a first, motion-OK
+   visit, with no flash of the homepage and no flash of the overlay on return.
+   Motion is pure CSS (card-in / progress / lift); JS only reveals substrings.
+   ============================================================ */
+.intro-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: none; /* default: not armed → never shows (homepage is already there) */
+  padding: 24px;
+  background: #14110e;
+  transform: translateY(0);
+  /* the reveal: a long, eased sweep up and away (easeInOutQuint) */
+  transition: transform var(--intro-lift-ms, 1000ms) cubic-bezier(0.83, 0, 0.17, 1);
+  will-change: transform;
+}
+.intro-armed .intro-overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.intro-overlay.is-lifting {
+  transform: translateY(-106%);
+}
+
+/* card fades + rises in on the first frame of play */
+.intro-card {
+  opacity: 0;
+  transform: translateY(18px);
+}
+.intro-overlay.is-playing .intro-card {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity var(--intro-cardin, 300ms) ease,
+    transform var(--intro-cardin, 300ms) cubic-bezier(0.22, 1, 0.36, 1);
+}
+/* On reveal the answer card gently recedes (fade + drift + slight shrink) so the
+   exit feels layered, not a rigid block-slide. Declared after the play rule so
+   it wins while both .is-playing and .is-lifting are present on the overlay. */
+.intro-overlay.is-lifting .intro-card {
+  opacity: 0;
+  transform: translateY(-14px) scale(0.97);
+  transition:
+    opacity 520ms ease-out,
+    transform var(--intro-lift-ms, 1000ms) cubic-bezier(0.83, 0, 0.17, 1);
+}
+
+/* accent progress bar fills 0→100% across the build */
+.intro-bar-fill {
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+.intro-overlay.is-playing .intro-bar-fill {
+  transform: scaleX(1);
+  transition: transform var(--intro-bar-ms, 3450ms) linear;
+}
+
 /* Respect reduced-motion: kill non-essential animation, keep content visible */
 @media (prefers-reduced-motion: reduce) {
   *,

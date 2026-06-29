@@ -2,6 +2,13 @@ import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, Hanken_Grotesk, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import { GrainOverlay } from "@/components/site/grain-overlay";
+import { IntroOpener } from "@/components/site/intro-opener";
+
+// Runs before first paint: arm the intro only on a first visit this session
+// with motion allowed. Sets `.intro-armed` on <html> so CSS shows the overlay
+// with no flash of the homepage — and returning / reduced-motion visitors get
+// the site immediately with no flash of the overlay. Key matches INTRO_STORAGE_KEY.
+const INTRO_GUARD = `(function(){try{var k='intro_seen_c1';if(!sessionStorage.getItem(k)&&!matchMedia('(prefers-reduced-motion: reduce)').matches){document.documentElement.classList.add('intro-armed');}}catch(e){}})();`;
 
 // Display:headlines & big numbers. Body:UI/paragraphs. Mono:kickers, tags, chrome.
 const bricolage = Bricolage_Grotesque({
@@ -75,10 +82,14 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${bricolage.variable} ${hanken.variable} ${plexMono.variable} font-sans antialiased`}
       >
+        {/* Pre-paint guard — runs synchronously before the overlay below paints. */}
+        <script dangerouslySetInnerHTML={{ __html: INTRO_GUARD }} />
+        {/* Mounted before the page so its overlay paints on top with no flash. */}
+        <IntroOpener />
         {children}
         <GrainOverlay />
         <noscript>
