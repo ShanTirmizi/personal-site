@@ -1,5 +1,4 @@
 import { SiteHeader } from "@/components/site/site-header";
-import { ProfileHeader } from "@/components/site/profile-header";
 import { Hero } from "@/components/site/hero";
 import { ProofMetrics } from "@/components/site/proof-metrics";
 import { ShippedAt } from "@/components/site/shipped-at";
@@ -14,7 +13,6 @@ export default function Home() {
   return (
     <div className="relative min-h-screen">
       <SiteHeader />
-      <ProfileHeader />
       <main>
         <Hero />
         <ProofMetrics />
