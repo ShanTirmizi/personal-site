@@ -32,7 +32,7 @@ export function Avatar({
         />
       ) : (
         <div
-          className="flex h-full w-full items-center justify-center rounded-full bg-ink font-bold tracking-[-0.02em] text-paper-on-dark [font-family:var(--font-display)]"
+          className="flex h-full w-full items-center justify-center rounded-full bg-ink font-bold tracking-[-0.02em] text-paper-on-dark font-display"
           style={{ fontSize: Math.round(size * 0.36) }}
           aria-label={identity.name}
         >

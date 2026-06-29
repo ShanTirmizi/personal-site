@@ -16,7 +16,7 @@ export function ShippedAt() {
                 ·
               </span>
             )}
-            <span className="[font-family:var(--font-display)] text-[17px] font-bold tracking-[-0.01em] text-ink sm:text-[18px]">
+            <span className="font-display text-[17px] font-bold tracking-[-0.01em] text-ink sm:text-[18px]">
               {co}
             </span>
           </Fragment>

@@ -137,7 +137,7 @@ export const whyHire = {
 
 export const personal = {
   kicker: "Off the clock",
-  line: "I’m a geography nerd and serial traveller (it’s genuinely why Visa Atlas exists), and a lifelong Lego builder. Same instinct, really: take a messy pile of parts and turn it into something that clicks together.",
+  line: "I build to think. When something bugs me, I ship a small app to fix it, so there’s a long tail of projects behind the two I show off here. Otherwise: geography nerd, serial traveller (it’s why Visa Atlas exists), and a lifelong Lego builder. Same instinct every time: turn a messy pile of parts into something that clicks.",
 } as const;
 
 export const closing = {

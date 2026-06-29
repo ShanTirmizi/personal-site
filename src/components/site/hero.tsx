@@ -10,7 +10,7 @@ export function Hero() {
           <span className="inline-block h-px w-[18px] bg-brand" />
           {hero.kicker}
         </div>
-        <h2 className="[font-family:var(--font-display)] text-[clamp(33px,5vw,68px)] font-extrabold leading-[0.98] tracking-[-0.03em] text-ink sm:leading-[0.96]">
+        <h2 className="font-display text-[clamp(33px,5vw,68px)] font-extrabold leading-[0.98] tracking-[-0.03em] text-ink sm:leading-[0.96]">
           {hero.headlineTop}
           <br />
           <span className="text-brand">{hero.headlineAccent}</span>

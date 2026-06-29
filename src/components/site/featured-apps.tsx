@@ -25,7 +25,7 @@ function AppCard({ app }: { app: App }) {
 
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-baseline gap-x-2.5 gap-y-1">
-            <span className="[font-family:var(--font-display)] text-[24px] font-extrabold tracking-[-0.02em] text-ink">
+            <span className="font-display text-[24px] font-extrabold tracking-[-0.02em] text-ink">
               {app.name}
             </span>
             <span className="font-mono text-[10px] text-faint">{app.period}</span>
@@ -69,7 +69,7 @@ export function FeaturedApps() {
         <p className="mb-3.5 font-mono text-[11px] uppercase tracking-[0.2em] text-brand">
           {featured.kicker}
         </p>
-        <h2 className="mb-6 [font-family:var(--font-display)] text-[clamp(28px,3.4vw,42px)] font-extrabold tracking-[-0.025em] text-ink">
+        <h2 className="mb-6 font-display text-[clamp(28px,3.4vw,42px)] font-extrabold tracking-[-0.025em] text-ink">
           {featured.heading}
         </h2>
       </Reveal>

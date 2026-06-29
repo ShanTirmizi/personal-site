@@ -9,7 +9,7 @@ export function ClosingCta() {
         <p className="mb-4 font-mono text-[11px] tracking-[0.12em] text-brand-bright">
           {closing.kicker}
         </p>
-        <h2 className="[font-family:var(--font-display)] text-[clamp(30px,4.4vw,52px)] font-extrabold leading-[1.04] tracking-[-0.03em] text-paper-on-dark">
+        <h2 className="font-display text-[clamp(30px,4.4vw,52px)] font-extrabold leading-[1.04] tracking-[-0.03em] text-paper-on-dark">
           {closing.headlineTop}
           <br />
           {closing.headlineBottom}

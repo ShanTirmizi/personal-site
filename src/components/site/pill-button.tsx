@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 // Brand button recipes layered on the shadcn/Base-UI Button primitive (keeps its
 // focus ring + active press). Renders as <a> when `href` is provided.
 const pill = cva(
-  "h-auto min-h-11 rounded-[9px] font-semibold tracking-[-0.005em] [font-family:var(--font-sans)] transition-colors sm:min-h-0",
+  "h-auto min-h-11 rounded-[9px] font-semibold tracking-[-0.005em] font-sans transition-colors sm:min-h-0",
   {
     variants: {
       variant: {

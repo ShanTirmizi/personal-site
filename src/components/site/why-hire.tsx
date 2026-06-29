@@ -22,7 +22,7 @@ function Card({ card }: { card: HireCard }) {
       </div>
       <h3
         className={cn(
-          "mb-[9px] [font-family:var(--font-display)] text-[21px] font-bold tracking-[-0.01em]",
+          "mb-[9px] font-display text-[21px] font-bold tracking-[-0.01em]",
           card.inverted ? "text-paper-on-dark" : "text-ink",
         )}
       >
@@ -47,7 +47,7 @@ export function WhyHire() {
         <p className="mb-3.5 font-mono text-[11px] uppercase tracking-[0.2em] text-brand">
           {whyHire.kicker}
         </p>
-        <h2 className="mb-[26px] [font-family:var(--font-display)] text-[clamp(28px,3.4vw,42px)] font-extrabold tracking-[-0.025em] text-ink">
+        <h2 className="mb-[26px] font-display text-[clamp(28px,3.4vw,42px)] font-extrabold tracking-[-0.025em] text-ink">
           {whyHire.heading}
         </h2>
       </Reveal>

@@ -89,7 +89,7 @@ export function HabitQuestScreen() {
             <div className="font-mono text-[9px] tracking-[0.18em]" style={{ color: C.amber }}>
               YOUR QUEST
             </div>
-            <div className="[font-family:var(--font-display)] text-[23px] font-extrabold leading-none tracking-[-0.02em]">
+            <div className="font-display text-[23px] font-extrabold leading-none tracking-[-0.02em]">
               Today
               <span style={{ color: C.amber }}>.</span>
             </div>

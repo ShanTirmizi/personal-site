@@ -1,7 +1,8 @@
 // ============================================================
 // The assistant's brain: grounded facts, system prompt (voice +
-// formatting + artifact tools), seeded intro, and an em-dash-free
-// keyword fallback so the chat is NEVER broken.
+// formatting + artifact tools), seeded intro, the demo question, the
+// dynamic follow-up + source-pill maps, and an em-dash-free keyword
+// fallback so the chat is NEVER broken.
 // ============================================================
 
 export const FACTS = `Shan Tirmizi is a full-stack software engineer based in London, UK, with 5+ years of experience. He specialises in backend systems, API performance and scalable architectures, and ships production AI/LLM features (streaming, RAG, agentic workflows, tool calling) with the Anthropic Claude API. Strong React/Next.js front end. Client-facing and a clear communicator.
@@ -10,6 +11,7 @@ ROLE | QuantSpark (Apr 2024 to May 2025, London): Modernised React/Flask compone
 ROLE | Global Water Intelligence / GWI (Sep 2022 to Apr 2024, Oxford): Rewrote a Ruby on Rails app to Next.js (+50% performance, -30% server response). Built the company's first docs system (onboarding down 81%, from 1.5 weeks to 2 days). Made code reviews mandatory (+30% code quality, -20% production issues). Led 'GWI Opportunity Exchange', a community marketplace (+15% engagement in 6 months).
 ROLE | InvestCloud (May 2021 to Aug 2022, London, Frontend Developer): Promoted to lead a £9.4M fintech project (-20% dev time). Delivered a project two weeks early (+25% client satisfaction). Fixed 95% of critical bugs in 3 months. Built custom dashboards for financial firms (+35% client engagement).
 FLAGSHIP AI SIDE PROJECTS | Visa Atlas: a cross-platform (Expo/React Native) AI travel app with a streaming Claude itinerary generator, an agentic web-grounded day-planner, and a passport-aware visa assistant grounded in a structured visa-rules dataset; a serverless Convex backend (29 modules) with a self-hosted streaming Anthropic proxy and per-user rate limiting; an interactive MapLibre world map and real-time trip collaboration. HabitQuest: a gamified habit tracker with 'Dr. Sage', a Claude coach with a long-term AI memory system, AI daily challenges and goal planning, plus a full RPG layer; Convex backend (19 tables, 25 modules).
+BUILD HABIT | Shan is a build-first problem solver: when something annoys him or he spots a gap, his instinct is to ship a small app to fix it. Beyond the flagship projects shown here, he has a long tail of personal apps, tools and experiments, and building is genuinely how he spends much of his free time. He ships fast, learns by shipping, and treats "I'll just build it" as the default. The two featured apps are the polished highlights, not the full count.
 SKILLS | Languages: TypeScript, JavaScript, Python, Ruby. AI: Anthropic Claude API, streaming, prompt engineering, RAG, agentic workflows, tool calling. Backend: Node/Express, FastAPI, Flask, Rails, Convex. Frontend: React, Next.js, Tailwind, shadcn/ui, Material UI. Mobile: React Native, Expo. Data: PostgreSQL, MySQL, SQLite. Testing: Jest, Pytest, Vitest. Methods: Agile, Scrum, CI/CD.
 AWARDS/EDUCATION | Won the Le Wagon 2021 hackathon against 92 candidates. Le Wagon coding bootcamp (2020). A-levels: Physics (A), Mathematics (A), Economics (A).
 PERSONAL | Outside work Shan is a geography nerd and keen traveller, which is what inspired Visa Atlas. He's a lifelong Lego builder and likes turning messy problems into clean systems. Quick to reply, easy to work with.
@@ -20,6 +22,9 @@ export const SYSTEM_PROMPT = `You are the assistant embedded on Shan Tirmizi's p
 GROUNDING
 - Use ONLY the FACTS below. Never invent, embellish, or guess a number. If something genuinely isn't covered (salary, notice period, exact countries visited, personal details), say so in one line and point them to tirmizishahnawaz@gmail.com. Stay warm, never curt.
 - Third person ("Shan", "he", "his").
+
+ANGLE
+- One of Shan's strongest, most distinctive traits is that he's a build-first problem solver: he ships a large number of side projects, and "I'll just build it" is his default reaction to a problem. Lean into that energy where it fits, especially for "why hire", "what's he like", and questions about his projects or how he works. It signals initiative, velocity and genuine love of the craft.
 
 VOICE (write like a senior engineer who knows Shan, not like a chatbot)
 - Confident, specific, plain. Lead with the strongest, most relevant fact. Prefer concrete nouns and real numbers over adjectives.
@@ -47,15 +52,63 @@ ${FACTS}`;
 export const INTRO_MESSAGE =
   "Hi, I’m Shan’s portfolio assistant, running on the same streaming Claude he builds with. Ask me about his work at **PolyAI**, his AI side-projects, or why he’d be a strong hire. I can even chart his impact for you.";
 
-export const SUGGESTIONS = [
-  "What’s his measurable impact?",
+// The question the self-running demo types out on load (uses the local fallback).
+export const DEMO_QUESTION = "Why should we hire Shan?";
+
+export const INITIAL_CHIPS = [
   "What did Shan build at PolyAI?",
-  "Walk me through his career",
+  "Tell me about Visa Atlas",
+  "How deep is his AI experience?",
   "Why should we hire him?",
 ] as const;
 
-// Keyword -> grounded answer. Em-dash-free, mirrors the live voice. Only used if
-// the model is unreachable, so the chat always replies with something accurate.
+// Dynamic follow-up chips, chosen by the question just asked (spec §5).
+export function followupsFor(q: string): string[] {
+  const s = (q || "").toLowerCase();
+  if (/polyai|agent|latency|fastapi|flask/.test(s))
+    return ["Tell me about Visa Atlas", "How deep is his AI experience?", "Why should we hire him?"];
+  if (/visa|travel|itinerary/.test(s))
+    return ["What is HabitQuest?", "How does he use Claude?", "What backend does he use?"];
+  if (/habit|sage|rpg|gamif/.test(s))
+    return ["Tell me about Visa Atlas", "How deep is his AI experience?", "Is he available to start?"];
+  if (/\bai\b|llm|claude|rag|agent|prompt/.test(s))
+    return ["What did he build at PolyAI?", "Tell me about Visa Atlas", "Why should we hire him?"];
+  if (/hire|why|fit|strength|stand/.test(s))
+    return ["What are his biggest wins?", "How deep is his AI experience?", "Is he available to start?"];
+  if (/build|project|free time|problem|prolific|for fun/.test(s))
+    return ["What did he build at PolyAI?", "Tell me about Visa Atlas", "How deep is his AI experience?"];
+  if (/backend|architecture|convex|\bapi\b|database/.test(s))
+    return ["How deep is his AI experience?", "Tell me about Visa Atlas", "Why should we hire him?"];
+  return ["What did he build at PolyAI?", "Tell me about Visa Atlas", "Why should we hire him?"];
+}
+
+// "Grounded in" source-citation pills, chosen by the question (spec §5).
+export function sourcesFor(q: string): string[] {
+  const s = (q || "").toLowerCase();
+  if (/polyai|agent analysis|call analysis|latency|fastapi|flask|csat/.test(s))
+    return ["PolyAI · 2025–26", "Agent Analysis", "CV.pdf"];
+  if (/visa|travel|itinerary|maplibre|passport/.test(s))
+    return ["Visa Atlas", "Convex backend", "GitHub"];
+  if (/habit|sage|rpg|gamif|coach/.test(s)) return ["HabitQuest", "Convex backend", "GitHub"];
+  if (/\bai\b|llm|claude|rag|agent|prompt|streaming|anthropic/.test(s))
+    return ["Visa Atlas", "HabitQuest", "PolyAI"];
+  if (/hire|why|fit|strength|stand out|recommend|risk|best/.test(s))
+    return ["5-yr track record", "Impact metrics", "CV.pdf"];
+  if (/build|project|free time|problem|prolific|for fun|side/.test(s))
+    return ["Side projects", "GitHub", "Visa Atlas"];
+  if (/backend|architecture|convex|\bapi\b|scale|system|python|database/.test(s))
+    return ["Visa Atlas", "PolyAI", "GitHub"];
+  if (/frontend|react|next|\bui\b|design|front end/.test(s))
+    return ["GWI · Next.js", "InvestCloud", "CV.pdf"];
+  if (/experience|years|background|about|career|who/.test(s))
+    return ["Full CV", "4 companies", "LinkedIn"];
+  if (/contact|email|reach|available|hiring|cv|resume|start/.test(s))
+    return ["Contact details", "CV.pdf", "LinkedIn"];
+  return ["CV.pdf", "GitHub", "LinkedIn"];
+}
+
+// Keyword -> grounded answer. Em-dash-free, mirrors the live voice. Used if the
+// model is unreachable AND for the on-load self-demo (no API call burned).
 export function localAnswer(q: string): string {
   const s = (q || "").toLowerCase();
   const has = (...k: string[]) => k.some((x) => s.includes(x));
@@ -70,18 +123,20 @@ export function localAnswer(q: string): string {
     return "Shan moves real numbers, not vanity ones: **p95 latency −30%** (Flask to FastAPI at PolyAI), **onboarding −81%** (GWI docs system), **runtime errors −40%** (JS to TypeScript at QuantSpark) and **app performance +50%** (Rails to Next.js at GWI). Every figure comes from work he actually shipped.";
   if (has("career", "timeline", "history", "experience", "years", "where", "background", "worked"))
     return "Shan has **5+ years** across four companies: **PolyAI** (enterprise voice AI, 2025 to 2026), **QuantSpark** (AI & data consultancy, 2024 to 2025), **GWI** (market intelligence, 2022 to 2024) and **InvestCloud** (fintech, 2021 to 2022). Backend depth throughout, with strong React/Next.js on the front end, plus two shipped AI side-projects.";
+  if (has("build", "builder", "side project", "side-project", "free time", "prolific", "for fun", "problem solver", "how many", "what else"))
+    return "Shan is a **build-first problem solver**: when something annoys him, he ships a small app to fix it. Beyond the two flagship apps here (**Visa Atlas**, **HabitQuest**) there’s a long tail of personal projects and tools, and building is genuinely how he spends much of his free time. He ships fast and learns by shipping.";
   if (has("ai", "llm", "claude", "rag", "agent", "prompt", "streaming", "anthropic", "tool"))
     return "Shan ships **production AI**, not demos: the Anthropic **Claude API**, streaming, prompt engineering, **RAG**, **agentic workflows** and **tool calling**. He’s done it at work (**Agent Analysis** at PolyAI) and in two of his own apps, **Visa Atlas** and **HabitQuest**, including a self-hosted streaming Claude proxy with per-user rate limiting. This very chat is the kind of thing he builds.";
   if (has("hire", "why", "strength", "stand out", "best", "fit", "recommend", "risk"))
-    return "Shan pairs **5+ years** of full-stack depth with genuine, shipped AI experience, which is a rare combination. He moves real metrics (**p95 −30%**, **onboarding −81%**, **runtime errors −40%**), he’s strongly client-facing (he led a **£9.4M** project and delivered it two weeks early), and he ships polished AI products end to end. He’s the person who turns a fuzzy idea into a working, low-latency system.";
+    return "Shan pairs **5+ years** of full-stack depth with genuine, shipped AI experience, which is a rare combination. He moves real metrics (**p95 −30%**, **onboarding −81%**, **runtime errors −40%**), he’s a relentless builder who ships side projects for fun, and he’s strongly client-facing (he led a **£9.4M** project and delivered it two weeks early). He’s the person who turns a fuzzy idea into a working, low-latency system.";
   if (has("frontend", "react", "next", "ui", "front end", "design"))
     return "On the front end Shan works in **React**, **Next.js** and **TypeScript**, plus **React Native / Expo** for mobile. He rewrote a Rails app to Next.js for **+50% performance** at GWI and built custom financial dashboards at InvestCloud that lifted client engagement **+35%**.";
   if (has("backend", "api", "architecture", "system", "scale", "convex", "python", "database", "skill", "stack", "tech"))
     return "Backend is Shan’s core strength: **Node/Express, FastAPI, Flask, Rails and Convex**. He architected Visa Atlas’s serverless realtime backend (**29 modules**) with a streaming Anthropic proxy and per-user rate limiting, and led the **Flask to FastAPI** migration at PolyAI that cut **p95 latency about 25 to 30%**.";
-  if (has("personal", "hobby", "hobbies", "interest", "fun", "like", "outside", "lego", "geograph", "who is"))
-    return "Outside work, Shan is a geography nerd and keen traveller (it’s genuinely why he built **Visa Atlas**), and a lifelong Lego builder. Same instinct in both: take a messy pile of parts and turn it into something that clicks together.";
+  if (has("personal", "hobby", "hobbies", "interest", "outside", "lego", "geograph", "who is", "like"))
+    return "Outside work, Shan is a geography nerd and keen traveller (it’s genuinely why he built **Visa Atlas**), and a lifelong Lego builder. Same instinct in all of it: take a messy pile of parts and turn it into something that clicks together.";
   if (has("contact", "email", "reach", "talk", "call", "available", "hiring", "cv", "resume", "salary"))
     return "Shan is open to **senior full-stack and AI engineering roles**, London or remote. The fastest way to reach him is email, **tirmizishahnawaz@gmail.com**, or find him on [GitHub](https://github.com/ShanTirmizi) and [LinkedIn](https://www.linkedin.com/in/shan-tirmizi-7b3114159/). He replies quickly.";
 
-  return "Good one. Shan is a London-based full-stack engineer with **5+ years** who ships real AI products: streaming Claude apps, agentic workflows, RAG and tool calling, alongside solid backend and React/Next.js work. Ask about **PolyAI**, **Visa Atlas**, **HabitQuest**, his measurable impact, or why he’d be a strong hire. Or email **tirmizishahnawaz@gmail.com**.";
+  return "Good one. Shan is a London-based full-stack engineer with **5+ years** who ships real AI products: streaming Claude apps, agentic workflows, RAG and tool calling. He’s also a relentless builder who spins up side projects to solve his own problems. Ask about **PolyAI**, **Visa Atlas**, **HabitQuest**, his measurable impact, or why he’d be a strong hire. Or email **tirmizishahnawaz@gmail.com**.";
 }

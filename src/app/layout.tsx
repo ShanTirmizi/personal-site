@@ -7,6 +7,7 @@ import { GrainOverlay } from "@/components/site/grain-overlay";
 const bricolage = Bricolage_Grotesque({
   variable: "--font-bricolage",
   subsets: ["latin"],
+  axes: ["opsz"],
   display: "swap",
 });
 const hanken = Hanken_Grotesk({
@@ -76,7 +77,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${bricolage.variable} ${hanken.variable} ${plexMono.variable} antialiased`}
+        className={`${bricolage.variable} ${hanken.variable} ${plexMono.variable} font-sans antialiased`}
       >
         {children}
         <GrainOverlay />

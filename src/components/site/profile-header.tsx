@@ -10,7 +10,7 @@ export function ProfileHeader() {
           {/* Drop /public/headshot.jpg and add src="/headshot.jpg" for a real photo */}
           <Avatar />
           <div>
-            <h1 className="[font-family:var(--font-display)] text-[20px] font-bold tracking-[-0.01em] text-ink">
+            <h1 className="font-display text-[20px] font-bold tracking-[-0.01em] text-ink">
               {identity.name}
             </h1>
             <p className="mt-1 font-mono text-[10.5px] tracking-[0.07em] text-muted-2">
