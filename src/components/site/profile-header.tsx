@@ -1,6 +1,8 @@
+import { Mail, Download } from "lucide-react";
 import { identity, contact } from "@/lib/site-data";
 import { Avatar } from "./avatar";
 import { PillButton } from "./pill-button";
+import { GithubIcon, LinkedinIcon } from "./brand-icons";
 
 export function ProfileHeader() {
   return (
@@ -25,16 +27,20 @@ export function ProfileHeader() {
             OPEN TO WORK
           </span>
           <PillButton href={contact.mailto} variant="accent">
+            <Mail aria-hidden />
             Email
           </PillButton>
           <PillButton href={contact.linkedin} external variant="outline">
+            <LinkedinIcon />
             LinkedIn
           </PillButton>
           <PillButton href={contact.github} external variant="outline">
+            <GithubIcon />
             GitHub
           </PillButton>
           <PillButton href={contact.cv} download="Shan-Tirmizi-CV.pdf" variant="outline">
-            Download CV <span className="text-[14px] leading-none">↓</span>
+            <Download aria-hidden />
+            Download CV
           </PillButton>
         </div>
       </div>

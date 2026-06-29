@@ -1,3 +1,4 @@
+import { Download } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { App, StoreLink } from "@/lib/site-data";
 
@@ -30,7 +31,7 @@ function StoreButton({
 
   const inner = (
     <>
-      <span className="text-[15px] leading-none">↓</span>
+      <Download size={16} aria-hidden className="shrink-0" />
       <span className="text-left leading-[1.15]">
         <span className="block font-mono text-[8px] tracking-[0.08em] opacity-65">
           {label.top}

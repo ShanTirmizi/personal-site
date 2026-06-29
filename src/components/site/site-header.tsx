@@ -8,13 +8,8 @@ export function SiteHeader() {
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-ink text-[15px] font-bold tracking-[-0.02em] text-paper-on-dark font-display">
             {identity.monogram}
           </div>
-          <div className="leading-[1.05]">
-            <div className="font-display text-[16px] font-bold tracking-[-0.01em] text-ink">
-              {identity.name}
-            </div>
-            <div className="mt-0.5 font-mono text-[9.5px] uppercase tracking-[0.18em] text-muted-3">
-              {identity.headerEyebrow}
-            </div>
+          <div className="font-display text-[16px] font-bold tracking-[-0.01em] text-ink">
+            {identity.name}
           </div>
         </div>
 

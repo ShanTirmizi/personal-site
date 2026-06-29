@@ -1,6 +1,8 @@
+import { Mail, Download } from "lucide-react";
 import { Reveal } from "@/components/motion/reveal";
 import { closing, contact } from "@/lib/site-data";
 import { PillButton } from "./pill-button";
+import { GithubIcon, LinkedinIcon } from "./brand-icons";
 
 export function ClosingCta() {
   return (
@@ -19,12 +21,15 @@ export function ClosingCta() {
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           <PillButton href={contact.mailto} variant="accent" size="lg" className="max-sm:w-full">
+            <Mail aria-hidden />
             {contact.email}
           </PillButton>
           <PillButton href={contact.linkedin} external variant="darkSoft" size="lg">
+            <LinkedinIcon />
             LinkedIn
           </PillButton>
           <PillButton href={contact.github} external variant="darkSoft" size="lg">
+            <GithubIcon />
             GitHub
           </PillButton>
           <PillButton
@@ -33,7 +38,8 @@ export function ClosingCta() {
             variant="darkSoft"
             size="lg"
           >
-            Download CV <span className="text-[15px] leading-none">↓</span>
+            <Download aria-hidden />
+            Download CV
           </PillButton>
         </div>
       </Reveal>

@@ -6,8 +6,7 @@ export function Hero() {
     <section className="mx-auto grid max-w-[1200px] grid-cols-1 items-center gap-10 px-5 pt-10 pb-[34px] sm:px-7 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.06fr)] lg:gap-[50px] lg:pt-[46px]">
       {/* left:headline */}
       <div className="animate-rise">
-        <div className="mb-5 flex items-center gap-[9px] font-mono text-[11px] uppercase tracking-[0.2em] text-brand">
-          <span className="inline-block h-px w-[18px] bg-brand" />
+        <div className="mb-5 font-mono text-[11px] uppercase tracking-[0.2em] text-brand">
           {hero.kicker}
         </div>
         <h2 className="font-display text-[clamp(33px,5vw,68px)] font-extrabold leading-[0.98] tracking-[-0.03em] text-ink sm:leading-[0.96]">

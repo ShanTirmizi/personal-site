@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { ArrowRight } from "lucide-react";
 import { Reveal } from "@/components/motion/reveal";
 import { apps, appsNote, featured, type App } from "@/lib/site-data";
 import { PhoneMockup } from "./phone-mockup";
@@ -33,10 +34,8 @@ function AppCard({ app }: { app: App }) {
           <div className="mt-1.5 mb-3 font-mono text-[11px] text-muted-3">{app.kind}</div>
           <ul className="flex flex-col gap-2">
             {app.highlights.map((h) => (
-              <li key={h} className="flex gap-[9px] text-[13.5px] leading-[1.45] text-ink-soft">
-                <span className="flex-none text-brand" aria-hidden>
-                  →
-                </span>
+              <li key={h} className="flex gap-2 text-[13.5px] leading-[1.45] text-ink-soft">
+                <ArrowRight size={15} className="mt-[3px] flex-none text-brand" aria-hidden />
                 <span>{h}</span>
               </li>
             ))}

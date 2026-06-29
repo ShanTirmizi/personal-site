@@ -109,7 +109,7 @@ export type HireCard = {
 
 export const whyHire = {
   kicker: "The case",
-  heading: "Why I’m a low-risk hire.",
+  heading: "What you’re getting.",
   cards: [
     {
       idx: "01",
@@ -124,7 +124,7 @@ export const whyHire = {
     },
     {
       idx: "03",
-      title: "I de-risk your delivery",
+      title: "I deliver under pressure",
       body: "Client-facing for years: I led a £9.4M project, delivered two weeks early, and fixed 95% of critical bugs in three months. I communicate clearly with non-technical stakeholders.",
     },
     {

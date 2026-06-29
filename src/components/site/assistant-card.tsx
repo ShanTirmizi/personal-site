@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { Check } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useAssistant, THINK_PHRASES } from "@/hooks/use-assistant";
@@ -100,8 +100,8 @@ export function AssistantCard() {
         {/* header */}
         <div className="flex items-center justify-between border-b border-white/[0.08] bg-white/[0.015] px-[18px] py-3.5">
           <div className="flex items-center gap-2.5">
-            <div className="glow-pulse flex h-6 w-6 items-center justify-center rounded-[7px] bg-brand text-[13px] text-paper-on-dark">
-              <span aria-hidden>✦</span>
+            <div className="glow-pulse flex h-6 w-6 items-center justify-center rounded-[7px] bg-brand font-display text-[10px] font-bold tracking-[-0.02em] text-paper-on-dark">
+              ST
             </div>
             <span className="text-[13.5px] font-semibold text-paper-on-dark">
               Shan&apos;s portfolio assistant
@@ -129,8 +129,8 @@ export function AssistantCard() {
             const showTrace = isActive && status === "thinking";
             return (
               <div key={m.id} className="mb-[18px] flex items-start gap-[11px]">
-                <div className="mt-0.5 flex h-6 w-6 flex-none items-center justify-center rounded-[7px] border border-brand/35 bg-brand/[0.16] text-[12px] text-brand-bright">
-                  <span aria-hidden>✦</span>
+                <div className="mt-0.5 flex h-6 w-6 flex-none items-center justify-center rounded-[7px] border border-brand/35 bg-brand/[0.16] font-display text-[10px] font-bold tracking-[-0.02em] text-brand-bright">
+                  ST
                 </div>
                 <div className="min-w-0 flex-1 pt-0.5">
                   {showTrace ? (
@@ -203,10 +203,8 @@ export function AssistantCard() {
             aria-label="Ask"
             className="h-auto shrink-0 gap-1.5 rounded-[10px] border-transparent bg-brand px-[17px] text-[14px] font-semibold text-paper-on-dark hover:bg-brand-hover"
           >
-            Ask{" "}
-            <span className="text-[15px] leading-none" aria-hidden>
-              →
-            </span>
+            Ask
+            <ArrowRight aria-hidden />
           </Button>
         </form>
       </div>
