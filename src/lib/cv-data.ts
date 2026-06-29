@@ -86,3 +86,93 @@ export const skills: SkillGroup[] = [
   { group: "Data", items: ["PostgreSQL", "MySQL", "SQLite", "SQLAlchemy"] },
   { group: "Quality", items: ["Jest", "Pytest", "Vitest", "CI/CD", "Agile"] },
 ];
+
+// Rich, reverse-chronological data for the expanding career-timeline section.
+export type TimelineRole = {
+  company: string;
+  shortName: string;
+  year: string;
+  period: string;
+  role: string;
+  location: string;
+  current?: boolean;
+  hero: string;
+  heroLabel: string;
+  secondary: string;
+  bullets: string[];
+  stack: string[];
+};
+
+export const timeline: TimelineRole[] = [
+  {
+    company: "PolyAI",
+    shortName: "PolyAI",
+    year: "2025",
+    period: "Jun 2025 – Feb 2026",
+    role: "Full-Stack SWE",
+    location: "London",
+    current: true,
+    hero: "−30%",
+    heroLabel: "p95 latency",
+    secondary: "Shipped Agent Analysis (LLM workflow)",
+    bullets: [
+      "Built & shipped Agent Analysis, an LLM-powered call-analysis workflow.",
+      "Led a Flask → FastAPI migration: p95 latency down ~25–30%.",
+      "Standardised post-call CSAT surveys into one configurable pipeline.",
+    ],
+    stack: ["FastAPI", "Python", "Next.js"],
+  },
+  {
+    company: "QuantSpark",
+    shortName: "QuantSpark",
+    year: "2024",
+    period: "Apr 2024 – May 2025",
+    role: "Full-Stack SWE",
+    location: "London",
+    hero: "−40%",
+    heroLabel: "runtime errors",
+    secondary: "+30% team dev velocity",
+    bullets: [
+      "Modernised a React/Flask component architecture (+30% velocity).",
+      "Drove a JS → TypeScript migration (−40% runtime errors).",
+      "Onboarded engineers and gathered requirements directly with clients.",
+    ],
+    stack: ["React", "TypeScript", "Flask"],
+  },
+  {
+    company: "Global Water Intelligence",
+    shortName: "GWI",
+    year: "2022",
+    period: "Sep 2022 – Apr 2024",
+    role: "Full-Stack SWE",
+    location: "Oxford",
+    hero: "−81%",
+    heroLabel: "onboarding time",
+    secondary: "+50% app performance",
+    bullets: [
+      "Rewrote the core app from Rails to Next.js (+50% performance, −30% server response).",
+      "Built the company’s first documentation system (onboarding −81%).",
+      "Made code reviews mandatory (+30% quality, −20% production issues).",
+      "Led ‘GWI Opportunity Exchange’, a community marketplace (+15% engagement).",
+    ],
+    stack: ["Next.js", "React", "Rails"],
+  },
+  {
+    company: "InvestCloud",
+    shortName: "InvestCloud",
+    year: "2021",
+    period: "May 2021 – Aug 2022",
+    role: "Frontend Developer",
+    location: "London",
+    hero: "£9.4M",
+    heroLabel: "project led",
+    secondary: "Fixed 95% of critical bugs in 3 months",
+    bullets: [
+      "Promoted to lead a £9.4M fintech project (−20% dev time).",
+      "Delivered a major project two weeks early (+25% client satisfaction).",
+      "Fixed 95% of critical bugs within three months (−25% support tickets).",
+      "Built custom dashboards for financial firms (+35% client engagement).",
+    ],
+    stack: ["React", "JavaScript", "TypeScript"],
+  },
+];

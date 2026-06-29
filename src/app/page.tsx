@@ -3,6 +3,7 @@ import { ProfileHeader } from "@/components/site/profile-header";
 import { Hero } from "@/components/site/hero";
 import { ProofMetrics } from "@/components/site/proof-metrics";
 import { ShippedAt } from "@/components/site/shipped-at";
+import { CareerTimeline } from "@/components/site/career-timeline";
 import { FeaturedApps } from "@/components/site/featured-apps";
 import { WhyHire } from "@/components/site/why-hire";
 import { PersonalNote } from "@/components/site/personal-note";
@@ -18,6 +19,7 @@ export default function Home() {
         <Hero />
         <ProofMetrics />
         <ShippedAt />
+        <CareerTimeline />
         <FeaturedApps />
         <WhyHire />
         <PersonalNote />
