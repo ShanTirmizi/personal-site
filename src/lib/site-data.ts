@@ -32,8 +32,8 @@ export const hero = {
   kicker: "Open to senior AI & full-stack roles",
   headlineTop: "Don’t read my CV.",
   headlineAccent: "Talk to it.",
-  sub: "I’m an AI engineer who ships: streaming Claude apps, agentic workflows and low-latency backends, all in production. Don’t take my word for it. Ask the assistant, or skim the proof below.",
-  proofLine: "5+ yrs shipping · 3 LLM products · p95 −30% · onboarding −81%",
+  sub: "I’m an AI engineer who ships: streaming LLM apps, agentic workflows and low-latency backends, all in production. Don’t take my word for it. Ask the assistant, or skim the proof below.",
+  proofLine: "5+ years shipping production AI · plus a long tail of side projects",
 } as const;
 
 export const shippedAt = [
@@ -76,6 +76,8 @@ export const apps: App[] = [
       "AI itinerary generator producing complete, structured trip plans (flights, lodging, dining, activities) with streaming Claude responses.",
       "Agentic, web-grounded day-planner that turns a start point, transport mode and vibe into a geocoded, routed itinerary.",
       "Claude-powered visa assistant: grounded, passport-aware answers backed by a structured visa-rules dataset.",
+      "Serverless Convex backend (29 modules) with a self-hosted streaming Anthropic proxy and per-user rate limiting.",
+      "Interactive MapLibre world map and real-time, multi-user trip collaboration.",
     ],
     stack: ["Expo", "React Native", "TypeScript", "Convex"],
     store: { appStore: comingSoon, googlePlay: comingSoon },
@@ -93,6 +95,8 @@ export const apps: App[] = [
       "“Dr. Sage”, a Claude-powered AI coach that reads habits, journal entries and streaks for personalised, conversational guidance.",
       "AI memory system that extracts and stores preferences, blockers and strategies over time, so coaching improves with use.",
       "AI-generated daily challenges and an AI goal-planning assistant, all powered by Claude.",
+      "A full RPG layer (XP, evolving companions, weekly bosses) layered over the habit tracker to make consistency stick.",
+      "Serverless Convex backend (19 tables, 25 modules) handling state, streaks and the AI features.",
     ],
     stack: ["Expo", "React Native", "TypeScript", "Convex"],
     store: { appStore: comingSoon, googlePlay: comingSoon },
@@ -143,7 +147,7 @@ export const whyHire = {
 
 export const personal = {
   kicker: "Off the clock",
-  line: "I build to think. When something bugs me, I ship a small app to fix it, so there’s a long tail of projects behind the two I show off here. Otherwise: geography nerd, serial traveller (it’s why Visa Atlas exists), and a lifelong Lego builder. Same instinct every time: turn a messy pile of parts into something that clicks.",
+  line: "I build to think. When something bugs me, I ship a small app to fix it, so there’s a long tail of projects behind the two I show off here. Otherwise: geography nerd, serial traveller (it’s why Visa Atlas exists), and someone who likes building Lego. Same instinct every time: turn a messy pile of parts into something that clicks.",
 } as const;
 
 export const closing = {

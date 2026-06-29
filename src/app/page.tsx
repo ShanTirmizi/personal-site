@@ -1,6 +1,5 @@
 import { SiteHeader } from "@/components/site/site-header";
 import { Hero } from "@/components/site/hero";
-import { ProofMetrics } from "@/components/site/proof-metrics";
 import { ShippedAt } from "@/components/site/shipped-at";
 import { CareerTimeline } from "@/components/site/career-timeline";
 import { FeaturedApps } from "@/components/site/featured-apps";
@@ -15,7 +14,6 @@ export default function Home() {
       <SiteHeader />
       <main>
         <Hero />
-        <ProofMetrics />
         <ShippedAt />
         <CareerTimeline />
         <FeaturedApps />

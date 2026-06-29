@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     template: "%s · Shan Tirmizi",
   },
   description:
-    "Shan Tirmizi is a London-based AI & full-stack engineer who ships production streaming-Claude apps, agentic workflows and low-latency backends. Don't read his CV. Talk to it.",
+    "Shan Tirmizi is a London-based AI & full-stack engineer who ships production streaming LLM apps, agentic workflows and low-latency backends. Don't read his CV. Talk to it.",
   keywords: [
     "Shan Tirmizi",
     "AI Engineer",
@@ -62,7 +62,7 @@ export const metadata: Metadata = {
     siteName: "Shan Tirmizi",
     title: "Shan Tirmizi · AI & Full-Stack Engineer",
     description:
-      "Don't read my CV. Talk to it. A London-based AI engineer who ships streaming Claude apps, agentic workflows and low-latency backends in production.",
+      "Don't read my CV. Talk to it. A London-based AI engineer who ships streaming LLM apps, agentic workflows and low-latency backends in production.",
   },
   twitter: {
     card: "summary_large_image",
