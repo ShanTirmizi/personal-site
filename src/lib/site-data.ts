@@ -12,6 +12,11 @@ export const identity = {
   location: "London, UK",
 } as const;
 
+// CV link is configurable: set NEXT_PUBLIC_CV_URL to a hosted PDF (Google Drive,
+// Vercel Blob, Dropbox, etc.) so the CV can be updated without a code change.
+// Falls back to the bundled PDF in /public.
+const cvUrl = process.env.NEXT_PUBLIC_CV_URL?.trim() || "/Shan-Tirmizi-CV.pdf";
+
 export const contact = {
   email: "tirmizishahnawaz@gmail.com",
   mailto: `mailto:tirmizishahnawaz@gmail.com?subject=${encodeURIComponent(
@@ -19,7 +24,8 @@ export const contact = {
   )}`,
   github: "https://github.com/ShanTirmizi",
   linkedin: "https://www.linkedin.com/in/shan-tirmizi-7b3114159/",
-  cv: "/Shan-Tirmizi-CV.pdf",
+  cv: cvUrl,
+  cvIsExternal: /^https?:\/\//i.test(cvUrl),
 } as const;
 
 export const hero = {

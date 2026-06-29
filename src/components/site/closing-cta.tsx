@@ -34,9 +34,9 @@ export function ClosingCta() {
           </PillButton>
           <PillButton
             href={contact.cv}
-            download="Shan-Tirmizi-CV.pdf"
             variant="darkSoft"
             size="lg"
+            {...(contact.cvIsExternal ? { external: true } : { download: "Shan-Tirmizi-CV.pdf" })}
           >
             <Download aria-hidden />
             Download CV

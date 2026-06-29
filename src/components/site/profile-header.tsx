@@ -38,7 +38,11 @@ export function ProfileHeader() {
             <GithubIcon />
             GitHub
           </PillButton>
-          <PillButton href={contact.cv} download="Shan-Tirmizi-CV.pdf" variant="outline">
+          <PillButton
+            href={contact.cv}
+            variant="outline"
+            {...(contact.cvIsExternal ? { external: true } : { download: "Shan-Tirmizi-CV.pdf" })}
+          >
             <Download aria-hidden />
             Download CV
           </PillButton>
