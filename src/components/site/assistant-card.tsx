@@ -75,13 +75,13 @@ export function AssistantCard() {
     useAssistant();
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
-  // Auto-scroll to bottom as content streams, but don't fight a user who scrolled up.
+  // Pin to the newest message whenever the conversation changes (new question,
+  // trace step, or streamed text). It only fires on change, so reading back
+  // through earlier answers while idle is left alone, but asking anything snaps
+  // straight to the answer, even if you'd scrolled up.
   useEffect(() => {
     const el = scrollRef.current;
-    if (!el) return;
-    const last = messages[messages.length - 1];
-    const nearBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 120;
-    if (nearBottom || last?.role === "user") el.scrollTop = el.scrollHeight;
+    if (el) el.scrollTop = el.scrollHeight;
   }, [messages, status, thinkingStep]);
 
   return (
